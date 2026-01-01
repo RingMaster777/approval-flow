@@ -21,23 +21,27 @@ Many business workflows require multi-step approvals—expense reports, leave re
 ### Why This Structure?
 
 **Clean Architecture (Domain-Application-Infrastructure-API):**
+
 - **Domain**: Pure business entities (no dependencies)
 - **Application**: Business logic, CQRS handlers, DTOs
 - **Infrastructure**: Database context, external concerns
 - **API**: Controllers, middleware, presentation layer
 
 **Why CQRS + MediatR?**
+
 - Clear separation between reads and writes
 - Easy to test individual handlers
 - Scalable pattern for complex workflows
 - Industry-standard approach
 
 **Why FluentValidation?**
+
 - Keeps validation logic separate from business logic
 - Reusable validation rules
 - Clean, readable validation syntax
 
 **Why SQLite?**
+
 - Zero configuration for demo/development
 - Easy to swap for PostgreSQL/SQL Server in production
 - Perfect for personal projects and portfolios
@@ -50,23 +54,25 @@ Many business workflows require multi-step approvals—expense reports, leave re
 ```
 
 **Business Rules:**
+
 - Only Pending requests can be reviewed
 - All state changes are audited
 - History is immutable
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | ASP.NET Core 8 |
-| Database | Entity Framework Core + SQLite |
-| CQRS | MediatR |
-| Validation | FluentValidation |
-| API Documentation | Swagger/OpenAPI |
+| Layer             | Technology                     |
+| ----------------- | ------------------------------ |
+| Framework         | ASP.NET Core 8                 |
+| Database          | Entity Framework Core + SQLite |
+| CQRS              | MediatR                        |
+| Validation        | FluentValidation               |
+| API Documentation | Swagger/OpenAPI                |
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - .NET 8 SDK
 
 ### Run Locally
@@ -87,6 +93,7 @@ The database will be created automatically on first run.
 ## 📡 API Endpoints
 
 ### Create Approval Request
+
 ```http
 POST /api/approvals
 Content-Type: application/json
@@ -100,6 +107,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -110,16 +118,19 @@ Content-Type: application/json
 ```
 
 ### Get All Requests (with optional filter)
+
 ```http
 GET /api/approvals?status=Pending
 ```
 
 ### Get Single Request
+
 ```http
 GET /api/approvals/{id}
 ```
 
 ### Review Request (Approve/Reject)
+
 ```http
 POST /api/approvals/{id}/review
 Content-Type: application/json
@@ -133,11 +144,13 @@ Content-Type: application/json
 ```
 
 ### Get Approval History
+
 ```http
 GET /api/approvals/{id}/history
 ```
 
 **Response:**
+
 ```json
 [
   {
@@ -160,6 +173,7 @@ GET /api/approvals/{id}/history
 ## 🧪 Testing the API
 
 ### Using Swagger (Recommended)
+
 1. Run the application: `dotnet run`
 2. Open `https://localhost:7xxx/swagger`
 3. Try the endpoints interactively
@@ -229,6 +243,7 @@ ApprovalFlow/
 ## 🎓 What This Project Demonstrates
 
 ### Backend Engineering Skills
+
 ✅ **Clean Architecture** - Proper separation of concerns  
 ✅ **CQRS Pattern** - Command/Query responsibility segregation  
 ✅ **Domain Modeling** - State machines, business rules  
@@ -237,9 +252,10 @@ ApprovalFlow/
 ✅ **Database Design** - Proper relationships, constraints  
 ✅ **Audit Trail** - Immutable history tracking  
 ✅ **RESTful API Design** - Proper HTTP verbs and status codes  
-✅ **API Documentation** - Swagger/OpenAPI integration  
+✅ **API Documentation** - Swagger/OpenAPI integration
 
 ### Production-Ready Patterns
+
 - Idempotent operations
 - Business rule enforcement
 - Immutable audit logs
@@ -249,9 +265,11 @@ ApprovalFlow/
 ## 🔄 How to Extend
 
 ### Add Email Notifications
+
 Create a notification handler in MediatR pipeline:
+
 ```csharp
-public class ApprovalReviewedNotificationHandler : 
+public class ApprovalReviewedNotificationHandler :
     INotificationHandler<ApprovalReviewedEvent>
 {
     // Send email logic
@@ -259,14 +277,18 @@ public class ApprovalReviewedNotificationHandler :
 ```
 
 ### Add Role-Based Authorization
+
 Add role claims checking in middleware:
+
 ```csharp
 [Authorize(Roles = "Manager")]
 public async Task<ActionResult> ReviewRequest(...)
 ```
 
 ### Switch to PostgreSQL
+
 Update `appsettings.json`:
+
 ```json
 {
   "ConnectionStrings": {
@@ -276,12 +298,15 @@ Update `appsettings.json`:
 ```
 
 And in `Program.cs`:
+
 ```csharp
 options.UseNpgsql(connectionString)
 ```
 
 ### Add Multi-Level Approval
+
 Extend `ApprovalRequest` entity:
+
 ```csharp
 public int RequiredApprovers { get; set; }
 public List<Approval> Approvals { get; set; }
@@ -290,15 +315,19 @@ public List<Approval> Approvals { get; set; }
 ## 🤔 Interview Talking Points
 
 **"Why did you structure it this way?"**
+
 > I used Clean Architecture to ensure the domain logic is independent of infrastructure concerns. This makes the code testable and allows easy swapping of databases or frameworks without touching business logic.
 
 **"Where would this break at scale?"**
+
 > Currently uses SQLite which is single-file. At scale, I'd move to PostgreSQL with proper indexing on Status and CreatedAt columns. I'd also add caching for frequently-accessed requests and consider event sourcing for the audit trail.
 
 **"How would you extend this?"**
+
 > I'd add MediatR notifications for email alerts, implement role-based authorization, add multi-level approvals, and introduce a deadline/expiry system. The CQRS pattern makes adding features straightforward without modifying existing handlers.
 
 **"How do you ensure data consistency?"**
+
 > State transitions are controlled through business rules in handlers. The database enforces referential integrity, and the audit history is append-only (no updates/deletes). EF Core transactions ensure atomicity.
 
 ## 📝 License
