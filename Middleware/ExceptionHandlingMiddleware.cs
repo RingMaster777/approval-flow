@@ -2,7 +2,7 @@ using ApprovalFlow.Application.Common.Exceptions;
 using FluentValidation;
 using System.Text.Json;
 
-namespace ApprovalFlow.API.Middleware;
+namespace ApprovalFlow.Middleware;
 
 public class ExceptionHandlingMiddleware
 {

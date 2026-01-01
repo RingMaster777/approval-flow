@@ -1,6 +1,6 @@
 # Approval Flow Microservice
 
-A clean, production-ready approval workflow API built with ASP.NET Core 8, showcasing backend engineering best practices.
+A clean, production-ready .NET 9 microservice for managing approval workflows with PostgreSQL, built with domain-driven design, CQRS pattern, and comprehensive business logic.
 
 ## 🎯 What Problem Does It Solve?
 

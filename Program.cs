@@ -1,4 +1,4 @@
-using ApprovalFlow.API.Middleware;
+using ApprovalFlow.Middleware;
 using ApprovalFlow.Application.Validators;
 using ApprovalFlow.Infrastructure.Data;
 using FluentValidation;

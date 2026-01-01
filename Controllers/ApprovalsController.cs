@@ -4,7 +4,7 @@ using ApprovalFlow.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApprovalFlow.API.Controllers;
+namespace ApprovalFlow.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
