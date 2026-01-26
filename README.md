@@ -311,25 +311,6 @@ Extend `ApprovalRequest` entity:
 public int RequiredApprovers { get; set; }
 public List<Approval> Approvals { get; set; }
 ```
-
-## 🤔 Interview Talking Points
-
-**"Why did you structure it this way?"**
-
-> I used Clean Architecture to ensure the domain logic is independent of infrastructure concerns. This makes the code testable and allows easy swapping of databases or frameworks without touching business logic.
-
-**"Where would this break at scale?"**
-
-> Currently uses SQLite which is single-file. At scale, I'd move to PostgreSQL with proper indexing on Status and CreatedAt columns. I'd also add caching for frequently-accessed requests and consider event sourcing for the audit trail.
-
-**"How would you extend this?"**
-
-> I'd add MediatR notifications for email alerts, implement role-based authorization, add multi-level approvals, and introduce a deadline/expiry system. The CQRS pattern makes adding features straightforward without modifying existing handlers.
-
-**"How do you ensure data consistency?"**
-
-> State transitions are controlled through business rules in handlers. The database enforces referential integrity, and the audit history is append-only (no updates/deletes). EF Core transactions ensure atomicity.
-
 ## 📝 License
 
 MIT - Free to use for learning and portfolio purposes
